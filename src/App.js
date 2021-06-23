@@ -50,6 +50,13 @@ function App() {
         setItems(newArray)
     }
 
+    const keyPress = (e) =>{
+        const  code = e.keyCode || e.which
+        if (code === 13){
+            newItem()
+        }
+    }
+
     return (
         <div className="App">
             <div className="wrapper">
@@ -58,6 +65,7 @@ function App() {
                     placeholder="Enter something"
                     onChange={(e) => setItem(e.target.value)}
                     value={item}
+                    onKeyPress={(e) => keyPress(e)}
                 />
                 <button className="enter" onClick={newItem}>Enter</button>
             </div>
