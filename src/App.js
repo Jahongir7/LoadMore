@@ -1,93 +1,76 @@
-import React, { useState, useEffect } from "react";
-import { v4 as uuidv4 } from "uuid";
-import Draggable from "react-draggable";
+/** @jsx jsx */
+import { css, jsx } from "@emotion/core";
+import React, { useState } from "react";
 import "./App.css";
+import ReactMarkdown from "react-markdown/with-html";
 
-function App() {
-  const [item, setItem] = useState("");
-  const [items, setItems] = useState(
-    JSON.parse(localStorage.getItem("items")) || []
-  );
-
-  useEffect(() => {
-    localStorage.setItem("items", JSON.stringify(items));
-  }, [items]);
-
-  const newItem = () => {
-    console.log(item);
-    if (item.trim() !== "") {
-      const newItem = {
-        id: uuidv4(),
-        item,
-
-        defaultPos: {
-          x: 800,
-          y: -800,
-        },
-      };
-      setItems((items) => [...items, newItem]);
-      setItem("");
-    } else {
-      alert("Enter someting...");
-      setItem("");
-    }
-  };
-
-  const deleteNode = (id) => {
-    setItems(items.filter((item) => item.id !== id));
-  };
-
-  const updatePos = (data, index) => {
-    let newArray = [...items];
-    newArray[index].defaultPos = {
-      x: data.x,
-      y: data.y,
-    };
-    setItems(newArray);
-  };
-
-  const keyPress = (e) => {
-    const code = e.keyCode || e.which;
-    if (code === 13) {
-      newItem();
-    }
-  };
-
+const App = () => {
+  const [value, setValue] = useState("");
   return (
-    <div className="App">
-      <div className="wrapper">
-        <input
-          type="text"
-          placeholder="Enter something"
-          onChange={(e) => setItem(e.target.value)}
-          value={item}
-          onKeyPress={(e) => keyPress(e)}
-        />
-        <button className="enter" onClick={newItem}>
-          Enter
-        </button>
+    <div className="App" css={styles}>
+      <h1>Markdown</h1>
+      <div className="markdownContainer">
+        <textarea onChange={(e) => setValue(e.target.value)}></textarea>
+        <ReactMarkdown className="output" source={value} escapeHtml={false} />
       </div>
-
-      {items.map((item, index) => {
-        return (
-          <Draggable
-            key={index}
-            defaultPosition={item.defaultPos}
-            onStop={(_, data) => {
-              updatePos(data, index);
-            }}
-          >
-            <div className="todo_item" style={{ backgroundColor: item.color }}>
-              {`${item.item}`}
-              <button className="delete" onClick={() => deleteNode(item.id)}>
-                X
-              </button>
-            </div>
-          </Draggable>
-        );
-      })}
     </div>
   );
-}
+};
+
+const styles = css`
+  width: 100%;
+  min-height: 100vh;
+  background: #444;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  h1 {
+    font-size: 40px;
+    line-height: 1;
+    margin-bottom: 18px;
+  }
+  .markdownContainer {
+    width: 100%;
+    max-width: 1400px;
+    display: flex;
+    a{
+      color: red;
+    }
+    textarea,
+    .output {
+      width: 100%;
+      max-width: 50%;
+      padding: 20px;
+    }
+    textarea {
+      width: 100%;
+      resize: none;
+      border: none;
+      outline: none;
+    }
+    .output {
+      background: #2d4059;
+      height: 800px;
+      text-align: center;
+    }
+  }
+  @media (max-width: 980px) {
+    .markdownContainer {
+      flex-direction: column;
+      .output,
+      textarea {
+        max-width: 100%;
+        height: 400px;
+      }
+    }
+  }
+  @media (max-width: 1440px) {
+    .markdownContainer {
+      max-width: 90%;
+    }
+  }
+`;
 
 export default App;
