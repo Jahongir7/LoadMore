@@ -1,26 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./App.css";
+import data from "./data";
 
 const App = () => {
-  const [items, setItems] = useState([]);
   const [visible, setVisible] = useState(3);
-  useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/posts")
-      .then((res) => res.json())
-      .then((data) => setItems(data));
-  }, []);
+  const [questions, setQuestions] = useState(data);
+  const showMoreItems = () => {
+    setVisible((prev) => {
+      return prev + 3;
+    });
+  };
 
   return (
     <div className="App">
       <div className="container">
-        {items.map((item) => {
-          <div className="card">
-            <div className="id">
-              <span>{item.id}</span>
+        {questions.slice(0, visible).map((question) => {
+          return (
+            <div className="nagap">
+              <div className="id">{question.id}</div>
+              <div className="q-body">{question.body}</div>
             </div>
-            <p>{item.body}</p>
-          </div>;
+          );
         })}
+        <button onClick={showMoreItems}>Load More</button>
+        <br />
       </div>
     </div>
   );
