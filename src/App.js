@@ -1,28 +1,35 @@
 import React, { useState } from "react";
 import "./App.css";
-import data from "./data";
+import dates from "./data";
 
 const App = () => {
   const [visible, setVisible] = useState(3);
-  const [questions, setQuestions] = useState(data);
+  const [showButton, setShowButton] = useState(true);
+
   const showMoreItems = () => {
     setVisible((prev) => {
       return prev + 3;
     });
   };
-
+  const decrement = () => {
+    setVisible((prev) => {
+      return prev - 3;
+    });
+  };
+  
   return (
     <div className="App">
       <div className="container">
-        {questions.slice(0, visible).map((question) => {
+        {dates.slice(0, visible).map((question) => {
           return (
-            <div className="nagap">
+            <div className="nagap" key={question.id}>
               <div className="id">{question.id}</div>
               <div className="q-body">{question.body}</div>
             </div>
           );
         })}
         <button onClick={showMoreItems}>Load More</button>
+        {!showButton && <button onClick={decrement}>decrement</button>}
         <br />
       </div>
     </div>
