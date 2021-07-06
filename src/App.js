@@ -13,10 +13,15 @@ const App = () => {
   };
   const decrement = () => {
     setVisible((prev) => {
+      if (visible < 5) {
+        setShowButton(false);
+      } else {
+        setShowButton(true);
+      }
       return prev - 3;
     });
   };
-  
+
   return (
     <div className="App">
       <div className="container">
@@ -29,7 +34,7 @@ const App = () => {
           );
         })}
         <button onClick={showMoreItems}>Load More</button>
-        {!showButton && <button onClick={decrement}>decrement</button>}
+        {showButton && <button onClick={decrement}>decrement</button>}
         <br />
       </div>
     </div>
