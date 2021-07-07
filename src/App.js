@@ -1,44 +1,19 @@
-import React, { useState } from "react";
-import "./App.css";
-import dates from "./data";
+import React, { useState, useEffect } from "react";
 
-const App = () => {
-  const [visible, setVisible] = useState(3);
-  const [showButton, setShowButton] = useState(true);
+function App() {
+  const [count, setCount] = useState(0);
 
-  const showMoreItems = () => {
-    setVisible((prev) => {
-      return prev + 3;
-    });
-  };
-  const decrement = () => {
-    setVisible((prev) => {
-      if (visible < 5) {
-        setShowButton(false);
-      } else {
-        setShowButton(true);
-      }
-      return prev - 3;
-    });
-  };
+  // Similar to componentDidMount and componentDidUpdate:
+  useEffect(() => {
+    // Update the document title using the browser API
+    document.title = `You clicked ${count} times`;
+  });
 
   return (
-    <div className="App">
-      <div className="container">
-        {dates.slice(0, visible).map((question) => {
-          return (
-            <div className="nagap" key={question.id}>
-              <div className="id">{question.id}</div>
-              <div className="q-body">{question.body}</div>
-            </div>
-          );
-        })}
-        <button onClick={showMoreItems}>Load More</button>
-        {showButton && <button onClick={decrement}>decrement</button>}
-        <br />
-      </div>
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>Click me</button>
     </div>
   );
-};
-
+}
 export default App;
